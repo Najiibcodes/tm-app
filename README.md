@@ -1,49 +1,104 @@
-<div align="center">
-    <img src="./images/coderco.jpg" alt="CoderCo" width="300"/>
-</div>
+# Threat Modelling Tool on AWS ECS
 
-# CoderCo Assignment 1 - Open Source App Hosted on ECS with Terraform 🚀
+![App Demo](./images/Animation.gif)
 
-This project is based on Amazon's Threat Composer Tool, an open source tool designed to facilitate threat modeling and improve security assessments. You can explore the tool's dashboard here: [Threat Composer Tool](https://awslabs.github.io/threat-composer/workspaces/default/dashboard)
+---
 
-## Task/Assignment 📝
+## Tools and Technologies Used
 
-- Create your own repository and complete the task there. You may create a `app` in your repo and copy all the files in this directory into it. Or alternatively, you can use this directory as is. Your choice.
+<p align="center">
+  <img src="https://img.shields.io/badge/AWS-ECS-orange?logo=amazonaws&logoColor=white" alt="AWS ECS" />
+  <img src="https://img.shields.io/badge/Terraform-v1.5-blue?logo=terraform&logoColor=white" alt="Terraform" />
+  <img src="https://img.shields.io/badge/Docker-Multi--Stage-blue?logo=docker&logoColor=white" alt="Docker" />
+  <img src="https://img.shields.io/badge/GitHub-Actions-black?logo=github&logoColor=white" alt="GitHub Actions" />
+  <img src="https://img.shields.io/badge/Trivy-Security-green?logo=aqua&logoColor=white" alt="Trivy" />
+  <img src="https://img.shields.io/badge/Checkov-Infrastructure-green?logo=checkmarx&logoColor=white" alt="Checkov" />
+  <img src="https://img.shields.io/badge/Node.js-v18-green?logo=node.js&logoColor=white" alt="Node.js" />
+  <img src="https://img.shields.io/badge/Yarn-v1.22-blue?logo=yarn&logoColor=white" alt="Yarn" />
+</p>
 
-- Your task will be to create a container image for the app, push it to ECR (recommended) or DockerHub. Ideally, you should use a CI/CD pipeline to build, test, and push the container image.
+---
 
-- Deploy the app on ECS using Terraform. All the resources should be provisioned using Terraform. Use TF modules.
+## Overview
 
-- Make sure the app is live on `https://tm.<your-domain>` or `https://tm.labs.<your-domain>`
+This project showcases the deployment of Amazon's open-source **Threat Modelling Tool** on AWS ECS. The solution is designed to be highly scalable, secure, and production-ready, leveraging modern DevOps practices, including multi-stage Docker builds, modular Terraform configuration, and a robust CI/CD pipeline. Advanced security measures such as image scanning with Trivy and infrastructure security validation with Checkov are integrated to ensure reliability and compliance.
 
-- App must use HTTPS. Hosted on ECS. Figure out the rest. Once app is live, add screenshots to the README.md file.
+---
 
-- Add architecture diagram of how the infrastructure is setup. (Use Lucidchart or draw.io or mermaid) You are free to use any diagramming tool.
+## Features
 
-## Local app setup 💻
+- **Scalability**: Deployed using AWS ECS with Fargate for automatic scaling and high availability.
+- **Security**: 
+  - Docker images scanned with **Trivy** to identify vulnerabilities.
+  - Infrastructure validated with **Checkov** to ensure compliance with best practices.
+- **Production-Ready**: HTTPS integration for secure communication and robust infrastructure design.
+- **CI/CD Pipeline**: Automated deployment pipeline for seamless integration and delivery.
+- **Modular Terraform**: Clean and reusable infrastructure as code using modularised Terraform.
+- **Multi-Stage Docker Builds**: Lightweight and optimised container images.
 
+---
+
+## Architecture
+
+### High-Level Workflow
+1. **Infrastructure**:
+   - VPC with public subnets for load balancer and private subnets for ECS tasks.
+   - Application Load Balancer (ALB) with HTTPS termination.
+   - ECS Cluster using Fargate for serverless compute.
+
+2. **Deployment Pipeline**:
+   - CI/CD pipeline automates the build, test, and deploy process.
+   - Docker image built and pushed to AWS ECR.
+   - Terraform provisions AWS resources and deploys the app.
+
+3. **Security Enhancements**:
+   - Docker image scanned for vulnerabilities using **Trivy**.
+   - Terraform code checked for misconfigurations with **Checkov**.
+
+
+
+---
+
+### **Setup Instructions**
+
+#### **1. Clone the Repository**
+```bash
+git clone [repo-url]
+cd [repo-directory]
+```
+
+#### **2. Docker Setup**
+Build and run the application locally using Docker:
 ```bash
 yarn install
 yarn build
-yarn global add serve
-serve -s build
+yarn start
+```
+Access the app locally at `http://localhost:3000`.
 
-#yarn start
-http://localhost:3000/workspaces/default/dashboard
+#### **3. Deploy with Terraform**
 
-## or
-yarn global add serve
-serve -s build
+Initialise Terraform:
+```bash
+terraform init
 ```
 
-## Useful links 🔗
+Preview changes:
+```bash
+terraform plan
+```
 
-- [Terraform AWS Registry](https://registry.terraform.io/providers/hashicorp/aws/latest/docs)
-- [Terraform AWS ECS](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecs_cluster)
-- [Terraform Docs](https://www.terraform.io/docs/index.html)
-- [ECS Docs](https://docs.aws.amazon.com/ecs/latest/userguide/what-is-ecs.html)
+Apply the infrastructure deployment:
+```bash
+terraform apply
+```
 
-## Advice & Tips �
+Once deployed, access the tool via the custom domain.
 
-- This is just a simple app, you may use another app if you'd like. 
-- Use best practices for your Terraform code. Use best practices for your container image. Use best practices for your CI/CD pipeline.
+#### **4. Clean Up Resources**
+After the demo, clean up the AWS resources:
+```bash
+terraform destroy
+```
+
+---
