@@ -1,0 +1,83 @@
+# System and environment files
+.DS_Store
+.env
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# Build and compiled output
+build/
+dist/
+coverage/
+.nyc_output/
+*.lcov
+
+# Temporary files
+.cache
+*.tsbuildinfo
+.eslintcache
+
+# Test and debugging
+test-reports/
+lerna-debug.log*
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# Terraform-related files
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+.terraform.tfstate.lock.info
+*.tfvars
+*.tfvars.json
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Lock files
+yarn.lock
+.yarn-integrity
+
+# Project-specific inclusions
+!/package.json
+!/project.json
+!/LICENSE
+!/tsconfig.json
+!/tsconfig.dev.json
+!/src/
+!/test/
+
+# Exclude unnecessary overrides
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Ignore everything outside the current directory
+../*
+
+# Allow only files in the current project directory
+!./
+
+# Ignore unnecessary system and temporary files
+*.log
+.DS_Store
+*.tmp
+
+# Ignore Terraform state files
+terraform.tfstate
+terraform.tfstate.*
+
+# Ignore backup files
+*.backup
+
+# Ignore module caches and other Terraform-generated directories
+**/.terraform/*
