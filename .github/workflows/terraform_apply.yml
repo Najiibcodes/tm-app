@@ -22,11 +22,12 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ secrets.AWS_REGION }}
 
-    - name: Install Checkov and tfsec
-      # Install Checkov and tfsec
+    - name: Install Checkov
+      run: pip install checkov
+
+    - name: Install tfsec
       run: |
-        pip install checkov
-        curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/main/scripts/install-linux.sh | bash
+        curl -s https://install.aquasec.com/tfsec.sh | bash
 
     - name: Run Checkov Scan
       # Checkov warnings bypassed for demo purposes
