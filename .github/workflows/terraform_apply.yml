@@ -23,6 +23,7 @@ jobs:
         aws-region: ${{ secrets.AWS_REGION }}
 
     - name: Install Checkov and tfsec
+      # Install Checkov and tfsec
       run: |
         pip install checkov
         curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/main/scripts/install-linux.sh | bash
@@ -37,7 +38,7 @@ jobs:
       # tfsec scan results for demo purposes
       working-directory: ./terraform
       run: |
-        tfsec --out=tfsec-report.json .
+        tfsec --format json --out tfsec-report.json .
       continue-on-error: true
 
     - name: Save Reports
@@ -45,9 +46,9 @@ jobs:
       working-directory: ./terraform
       run: |
         checkov -d . --quiet --compact --output junitxml > checkov-report.xml
-        mv tfsec-report.json ./tfsec-report.json
 
     - name: Upload Reports
+      # Upload security scan reports
       uses: actions/upload-artifact@v3
       with:
         name: security-reports
