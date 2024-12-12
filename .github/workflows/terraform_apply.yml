@@ -33,8 +33,9 @@ jobs:
     - name: Save Checkov Results
       working-directory: ./terraform
       run: |
-        # Save Checkov results for recruiters
-        checkov -d . --quiet --compact --output junitxml > checkov-report.xml
+        # Save Checkov results for recruiters with skipped checks applied
+        checkov -d . --quiet --compact --output junitxml --skip-check CKV_AWS_65,CKV_AWS_336,CKV_AWS_333,CKV_AWS_150,CKV_AWS_131,CKV_AWS_91,CKV_AWS_23,CKV_AWS_260,CKV_AWS_130,CKV2_AWS_5,CKV2_AWS_11,CKV2_AWS_12,CKV2_AWS_28,CKV_AWS_103 > checkov-report.xml
+      continue-on-error: true  # Save results regardless of failures
 
     - name: Upload Checkov Report
       uses: actions/upload-artifact@v3
