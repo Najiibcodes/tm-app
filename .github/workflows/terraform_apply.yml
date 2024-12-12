@@ -28,6 +28,10 @@ jobs:
     - name: Install tfsec
       run: |
         curl -s https://install.aquasec.com/tfsec.sh | bash
+        export PATH="$HOME/.tfsec/bin:$PATH"
+
+    - name: Verify tfsec Installation
+      run: tfsec --version
 
     - name: Run Checkov Scan
       # Checkov warnings bypassed for demo purposes
