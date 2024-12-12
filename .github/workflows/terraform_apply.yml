@@ -25,13 +25,16 @@ jobs:
     - name: Install Checkov
       run: pip install checkov
 
-    - name: Run Checkov Scan
+    - name: Run Checkov Scan # Checkov warnings bypassed for demo purposes
       working-directory: ./terraform
-      run: checkov -d . --quiet --compact --output cli --framework terraform
+      run: |
+        checkov -d . --quiet --compact --output cli --framework terraform
 
     - name: Save Checkov Results
       working-directory: ./terraform
-      run: checkov -d . --quiet --compact --output junitxml > checkov-report.xml
+      run: |
+        # Save Checkov results for recruiters
+        checkov -d . --quiet --compact --output junitxml > checkov-report.xml
       continue-on-error: true  # Save results regardless of failures
 
     - name: Upload Checkov Report
@@ -46,4 +49,6 @@ jobs:
 
     - name: Terraform Apply
       working-directory: ./terraform
-      run: terraform apply -auto-approve
+      run: |
+        # Proceed with Terraform Apply
+        terraform apply -auto-approve
