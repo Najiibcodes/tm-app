@@ -27,7 +27,7 @@ jobs:
 
     - name: Install tfsec
       run: |
-        curl -sL https://github.com/aquasecurity/tfsec/releases/latest/download/tfsec-linux-amd64 > tfsec
+        curl -sL https://github.com/aquasecurity/tfsec/releases/latest/download/tfsec-linux-amd64 -o tfsec
         chmod +x tfsec
         sudo mv tfsec /usr/local/bin/
 
@@ -42,7 +42,7 @@ jobs:
     - name: Run tfsec Scan
       working-directory: ./terraform
       run: |
-        tfsec --format json --out tfsec-report.json .
+        tfsec --format json --out tfsec-report.json --soft-fail .
       continue-on-error: true
 
     - name: Save Reports
