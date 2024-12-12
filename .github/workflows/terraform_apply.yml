@@ -33,3 +33,9 @@ jobs:
     - name: Terraform Apply
       working-directory: ./terraform
       run: terraform apply -auto-approve
+
+    - name: Upload Terraform State
+      uses: actions/upload-artifact@v3
+      with:
+        name: terraform-state
+        path: ./terraform/terraform.tfstate
