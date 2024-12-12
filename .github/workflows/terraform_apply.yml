@@ -22,8 +22,10 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ secrets.AWS_REGION }}
 
-    - name: Install Checkov
-      run: pip install checkov
+    - name: Install Checkov and tfsec
+      run: |
+        pip install checkov
+        curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/main/scripts/install-linux.sh | bash
 
     - name: Run Checkov Scan
       # Checkov warnings bypassed for demo purposes
@@ -31,18 +33,27 @@ jobs:
       run: |
         checkov -d . --quiet --compact --output cli --framework terraform --skip-check CKV_AWS_65,CKV_AWS_336,CKV_AWS_333,CKV_AWS_150,CKV_AWS_131,CKV_AWS_91,CKV_AWS_23,CKV_AWS_260,CKV_AWS_130,CKV2_AWS_5,CKV2_AWS_11,CKV2_AWS_12,CKV2_AWS_28,CKV_AWS_103
 
-    - name: Save Checkov Results
-      # Save Checkov results for demo purposes with skipped checks applied
+    - name: Run tfsec Scan
+      # tfsec scan results for demo purposes
+      working-directory: ./terraform
+      run: |
+        tfsec --out=tfsec-report.json .
+      continue-on-error: true
+
+    - name: Save Reports
+      # Save Checkov and tfsec reports for demo purposes
       working-directory: ./terraform
       run: |
         checkov -d . --quiet --compact --output junitxml > checkov-report.xml
-      continue-on-error: true  # Save results regardless of failures
+        mv tfsec-report.json ./tfsec-report.json
 
-    - name: Upload Checkov Report
+    - name: Upload Reports
       uses: actions/upload-artifact@v3
       with:
-        name: checkov-report
-        path: ./terraform/checkov-report.xml
+        name: security-reports
+        path: |
+          ./terraform/checkov-report.xml
+          ./terraform/tfsec-report.json
 
     - name: Set up Terraform
       # Set up Terraform for execution
