@@ -35,10 +35,10 @@ jobs:
       run: curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh
 
     - name: Run Trivy Scan
-      run: ./trivy image --severity CRITICAL 156041431760.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/ecsproject:latest
+      run: ./bin/trivy image --severity CRITICAL 156041431760.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/ecsproject:latest
 
     - name: Save Trivy Report
-      run: ./trivy image --format table --output trivy-report.txt 156041431760.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/ecsproject:latest
+      run: ./bin/trivy image --format table --output trivy-report.txt 156041431760.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/ecsproject:latest
 
     - name: Upload Trivy Report
       uses: actions/upload-artifact@v3
