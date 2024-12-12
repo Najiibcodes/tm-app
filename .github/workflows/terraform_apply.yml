@@ -22,10 +22,24 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ secrets.AWS_REGION }}
 
-    - name: Set up Terraform
-      uses: hashicorp/setup-terraform@v2
+    - name: Install Checkov
+      run: pip install checkov
+
+    - name: Run Checkov Scan
+      working-directory: ./terraform
+      run: checkov -d . --quiet --compact --output cli --framework terraform --soft-fail=false
+      continue-on-error: false  # Fail on issues
+
+    - name: Save Checkov Results
+      working-directory: ./terraform
+      run: checkov -d . --quiet --compact --output junitxml > checkov-report.xml
+      continue-on-error: true  # Save results regardless of failures
+
+    - name: Upload Checkov Report
+      uses: actions/upload-artifact@v3
       with:
-        terraform_version: 1.5.7
+        name: checkov-report
+        path: ./terraform/checkov-report.xml
 
     - name: Terraform Init
       working-directory: ./terraform

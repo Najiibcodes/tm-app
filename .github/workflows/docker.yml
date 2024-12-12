@@ -1,7 +1,10 @@
 name: Build and Push to Amazon ECR
 
 on:
-  workflow_dispatch:  
+  push:
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
   build-and-push:
@@ -23,12 +26,24 @@ jobs:
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
 
-    - name: Build and Push Docker Image
-      uses: docker/build-push-action@v4
+    - name: Build Docker Image
+      run: |
+        docker build -t ecsproject:latest .
+        docker tag ecsproject:latest 156041431760.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/ecsproject:latest
+
+    - name: Install Trivy
+      run: curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh
+
+    - name: Run Trivy Scan
+      run: ./trivy image --severity CRITICAL 156041431760.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/ecsproject:latest
+
+    - name: Save Trivy Report
+      run: ./trivy image --format table --output trivy-report.txt 156041431760.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/ecsproject:latest
+
+    - name: Upload Trivy Report
+      uses: actions/upload-artifact@v3
       with:
-        context: .
-        file: ./Dockerfile
-        push: true
-        tags: |
-          156041431760.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/ecsproject:latest
-          156041431760.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/ecsproject:${{ github.sha }}
+        name: trivy-report
+        path: trivy-report.txt
+
+    - name: Push Docke
