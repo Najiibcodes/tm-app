@@ -67,3 +67,29 @@ variable "health_check_matcher" {
   description = "HTTP status code matcher for health checks"
   type        = string
 }
+
+variable "http_redirect_port" {
+  description = "Port for HTTP listener to redirect traffic to HTTPS"
+  type        = number
+}
+
+variable "https_listener_port" {
+  description = "Port for HTTPS listener"
+  type        = number
+}
+
+variable "ssl_policy" {
+  description = "SSL policy for HTTPS listener"
+  type        = string
+}
+
+variable "is_internal" {
+  description = "Whether the load balancer is internal"
+  type        = bool
+}
+
+variable "load_balancer_type" {
+  description = "Type of the load balancer (application, network, or gateway)"
+  type        = string
+}
+

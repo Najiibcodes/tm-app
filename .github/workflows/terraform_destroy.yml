@@ -1,7 +1,7 @@
 name: Terraform Destroy
 
 on:
-  workflow_dispatch:  
+  workflow_dispatch:
 
 jobs:
   terraform:
@@ -11,12 +11,6 @@ jobs:
     steps:
     - name: Checkout Code
       uses: actions/checkout@v3
-
-    - name: Download Terraform State
-      uses: actions/download-artifact@v3
-      with:
-        name: terraform-state
-        path: ./terraform
 
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v3
@@ -28,7 +22,7 @@ jobs:
     - name: Set up Terraform
       uses: hashicorp/setup-terraform@v2
       with:
-        terraform_version: 1.5.7  
+        terraform_version: 1.5.7
 
     - name: Terraform Init
       working-directory: ./terraform

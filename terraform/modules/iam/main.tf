@@ -1,17 +1,8 @@
 resource "aws_iam_role" "ecs_task_execution_role" {
   count = length(data.aws_iam_role.existing_role) == 0 ? 1 : 0
 
-  name = var.execution_role_name
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17",
-    Statement = [{
-      Effect = "Allow",
-      Principal = {
-        Service = "ecs-tasks.amazonaws.com"
-      },
-      Action = "sts:AssumeRole"
-    }]
-  })
+  name               = var.execution_role_name
+  assume_role_policy = var.assume_role_policy
 }
 
 resource "aws_iam_role_policy_attachment" "ecs_task_execution_policy" {

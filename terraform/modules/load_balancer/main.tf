@@ -1,7 +1,7 @@
 resource "aws_lb" "app_lb" {
   name               = var.lb_name
-  internal           = false
-  load_balancer_type = "application"
+  internal           = var.is_internal
+  load_balancer_type = var.load_balancer_type
   security_groups    = var.security_groups
   subnets            = var.subnets
 
@@ -10,7 +10,6 @@ resource "aws_lb" "app_lb" {
     Purpose = "Application Load Balancer"
   }
 }
-
 
 resource "aws_lb_target_group" "ecs_tg" {
   name        = var.target_group_name
@@ -31,9 +30,9 @@ resource "aws_lb_target_group" "ecs_tg" {
 
 resource "aws_lb_listener" "https_listener" {
   load_balancer_arn = aws_lb.app_lb.arn
-  port              = 443
+  port              = var.https_listener_port
   protocol          = "HTTPS"
-  ssl_policy        = "ELBSecurityPolicy-2016-08"
+  ssl_policy        = var.ssl_policy
   certificate_arn   = var.certificate_arn
 
   default_action {
@@ -44,7 +43,7 @@ resource "aws_lb_listener" "https_listener" {
 
 resource "aws_lb_listener" "listener_http" {
   load_balancer_arn = aws_lb.app_lb.arn
-  port              = 3000
+  port              = var.http_redirect_port
   protocol          = "HTTP"
 
   default_action {
@@ -52,7 +51,7 @@ resource "aws_lb_listener" "listener_http" {
 
     redirect {
       protocol    = "HTTPS"
-      port        = "443"
+      port        = tostring(var.https_listener_port)
       status_code = "HTTP_301"
     }
   }
